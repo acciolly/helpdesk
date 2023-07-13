@@ -5,7 +5,7 @@
 try
 {
 	//faz a conexão ao banco
-    $conexao = new PDO("mysql:host=localhost;dbname=helpdesk","root","");
+    $conexao = new PDO("mysql:host=localhost;dbname=helpdesk","super","helpdesk");
 	//garante a visualização de caracteres(acentos,ç,etc...) 
 	$conexao->exec("set names utf8");
 }
