@@ -45,7 +45,7 @@
                     <div class="login-content">
                         <div class="login-logo">
                             <a href="#">
-                                <img src="../images/icon/logo.png" alt="CoolAdmin" width = "100">
+                                <img src="../<?php echo $logo;?>" alt="CoolAdmin">
 								<p>HelpDesk Admin</p>
                             </a>
                         </div>

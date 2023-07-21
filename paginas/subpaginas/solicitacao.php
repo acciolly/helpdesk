@@ -329,9 +329,14 @@
 					</div>
 			
 					</div>
+					
+					<div class="modal-footer">
+											<button type = "submit" name = "voltar" class="btn btn-primary">Voltar</button>
+					</div>
 				
 			</div>
-		
+			
+			
 		
 		
 		
@@ -339,6 +344,10 @@
 		
 		
 		<?php
+		if(isset($_POST['voltar'])){
+				$_SESSION['categoria'] = null;
+				echo "<meta http-equiv='refresh' content='0, url='>";
+			}
 		
 		
 		

@@ -20,7 +20,15 @@
 	try{
 		require_once "funcoes/conexao.php";
 		
-		if(isset($_SESSION['solicitante'])){
+		$BuscaInstituicao = $conexao->query("SELECT * FROM tb_instituicao");
+		
+		if($BuscaInstituicao->rowCount() > 0){
+			$RSBuscaInstituicao = $BuscaInstituicao->fetch();
+			$logo = $RSBuscaInstituicao['logo'];
+			$lb_setor = $RSBuscaInstituicao['lb_setor'];
+			$lb_departamento = $RSBuscaInstituicao['lb_departamento'];
+			
+			if(isset($_SESSION['solicitante'])){
 			if($_SESSION['solicitante'] == "novo"){
 				$pagina = "cadsolicitante";
 			}else{
@@ -43,6 +51,10 @@
 		}else{
 			$pagina = "login";
 		}
+			
+		}else{echo "<meta http-equiv='refresh' content='0, url=admin/'>";;}
+		
+		
 	}catch(PDOException $ex){
 		$pagina = "parametro";
 	}

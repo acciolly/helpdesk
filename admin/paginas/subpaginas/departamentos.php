@@ -90,7 +90,7 @@
 													
 													echo "<tr>
 														  <td width = '10%'><a href='#' data-toggle='modal' data-target='#excluir".$id_modal."' title = 'Excluir Item'><i class = 'fa fa-times'></i></a></td>
-														  <td width = '10%'><a href='?p=".base64_encode('editasetor')."&id=".base64_encode($RSBusca['id'])."' title = 'Editar Setor'><i class = 'fa fa-edit'></i></a></td>
+														  <td width = '10%'><a href='?p=".base64_encode('editadepartamento')."&id=".base64_encode($RSBusca['id'])."' title = 'Editar Setor'><i class = 'fa fa-edit'></i></a></td>
 														  <td>".$RSBusca['nome']."</td>
 														  <td>".$RSBusca['endereco']." nº ".$RSBusca['numero'].", ".$RSBusca['bairro']."</td>
 														  <td>".$RSBusca['setor']."</td>";

@@ -290,7 +290,8 @@
                 <div class="container-fluid">
                     <div class="header-mobile-inner">
                         <a class="logo" href="index.html">
-                            <img src="../images/icon/logo.png" alt="CoolAdmin" width = "50%"/>
+							<img src="../<?php echo $logo;?>" alt="CoolAdmin" width = "50%" />
+                            
                         </a>
                         <button class="hamburger hamburger--slider" type="button">
                             <span class="hamburger-box">
@@ -416,11 +417,15 @@
 								</li>
 								<li>
 									<a href="<?php echo '?p='.base64_encode('setores');?>">
-										<i class="bi bi-bank2"></i>Setores</a>
+										<i class="bi bi-bank2"></i><?php echo substr($lb_setor,0,15); ?></a>
 								</li>
 								<li>
 									<a href="<?php echo '?p='.base64_encode('departamentos');?>">
-										<i class="bi bi-house-door"></i>Departamentos</a>
+										<i class="bi bi-house-door"></i><?php echo substr($lb_departamento,0,15)."..."; ?></a>
+								</li>
+								<li>
+									<a href="<?php echo '?p='.base64_encode('editainstituicao');?>">
+										<i class="bi bi-bank2"></i>Instituição</a>
 								</li>
 							</ul>
 						</li>
@@ -558,11 +563,15 @@
 								</li>
 								<li>
 									<a href="<?php echo '?p='.base64_encode('setores');?>">
-										<i class="bi bi-bank2"></i>Setores</a>
+										<i class="bi bi-bank2"></i><?php echo substr($lb_setor,0,15); ?></a>
 								</li>
 								<li>
 									<a href="<?php echo '?p='.base64_encode('departamentos');?>">
-										<i class="bi bi-house-door"></i>Departamentos</a>
+										<i class="bi bi-house-door"></i><?php echo substr($lb_departamento,0,15)."..."; ?></a>
+								</li>
+								<li>
+									<a href="<?php echo '?p='.base64_encode('editainstituicao');?>">
+										<i class="bi bi-bank2"></i>Instituição</a>
 								</li>
 							</ul>
 						</li>

@@ -1,9 +1,14 @@
-var msgInicial = "Este é um canal exclusivo para abertura de chamados da Prefeitura de Campo Novo do Parecis.";
+var msgInicial = "";
 
 var _host = "";
 var _bd = "";
 var _uid = "";
 var _pass = "";
+
+var _instituicao = "";
+var _lbSetor = "";
+var _lbDepartamento = "";
+
 
 const fs = require('fs')
 try {
@@ -43,8 +48,57 @@ const connection = mysql.createConnection(
 );
 
 connection.connect(function (err){
-    console.log('Conectado ao MySQL.');
+    if(!err){
+        console.log('Conectado ao MySQL.');
+    }else{
+        console.log('Erro ao conectar na base de dados: '+err.message);
+        process.exit();
+    }
 });
+
+connection.query("SELECT * FROM tb_instituicao ORDER BY id DESC LIMIT 1", function(err,rows){
+    if(!err){
+        if(rows.length > 0){
+            _instituicao = rows[0].razao_social;
+            _lbSetor = rows[0].lb_setor;
+            _lbDepartamento = rows[0].lb_departamento;
+
+            msgInicial = "Olá! Este é um canal exclusivo para abertura de chamados da "+_instituicao;
+        }else{
+            console.log("SEM INSTITUIÇÃO CADASTRADA!");
+            process.exit();
+        }
+    }
+});
+
+//verifica se todos os cadastros necessários para realizar os chamdaos estão presentes no banco
+connection.query("SELECT * FROM tb_setor", function(err,rows){
+    if(!err){
+        if(rows.length > 0){
+            connection.query("SELECT * FROM tb_departamento",function(err,rowsDep){
+                if(!err){
+                    if(rowsDep.length > 0){
+                        connection.query("SELECT * FROM tb_categoria", function(err,rowsCat){
+                            if(!err){
+                                if(rowsCat.length === 0){
+                                    console.log("Não existe categoria cadastrada...");
+                                    process.exit();
+                                }
+                            }
+                        });
+                    }else{
+                        console.log("Não existe "+_lbDepartamento+" cadastrado(a)...");
+                        process.exit();
+                    }
+                }
+            });
+        }else{
+            console.log("Não existe "+_lbSetor+" cadastrado(a)...");
+            process.exit();
+        }
+    }
+});
+
 
 //guarda o whats na variavel client
 const client = new Client({

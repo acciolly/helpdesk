@@ -190,36 +190,111 @@ function maiuscula(z){
 
 </head>
 
-<body class="animsition">
-    <div class="page-wrapper">
+<body class="" style = "background-color: #E5E5E5;">
+    <div class="">
         <div class="page-content--bge5">
             <div class="container">
                 <div class="login-wrap">
                     <div class="login-content">
                         <div class="login-logo">
                             <a href="#">
-								
-                                <img src="../<?php echo $logo;?>" alt="CoolAdmin">
-								<p>Cadastre o primeiro usuário administrador</p>
+                                
+								<p>Cadastro da instituição</p>
                             </a>
                         </div>
                         <div class="login-form">
-                            <form action="" method="post">
+                            <form action="" method="post" enctype="multipart/form-data">
                                 <div class="form-group row">
 									<div class = "col-md-12">
-										<label>Nome</label>
-										<input class="au-input au-input--full" type="text" name="nome" placeholder="Nome" required onkeyup="maiuscula(this)"/>
+										<label>Razão Social</label>
+										<input class="au-input au-input--full" type="text" name="razao_social" placeholder="Razão Social" />
 									</div>
+									
                                 </div>
 								<div class="form-group row">
 									<div class = "col-md-6">
-										<label>CPF (apenas números)</label>
-										<input class="au-input au-input--full" type="text" name="cpf" placeholder="CPF" required />
+										<label>CNPJ (apenas números)</label>
+										<input class="au-input au-input--full" type="text" name="cnpj" placeholder="CNPJ" required />
 								    </div>
 									<div class = "col-md-6">
-										<label>Senha</label>
-										<input class="au-input au-input--full" type="password" name="senha" placeholder="Senha" required />
+										<label>Telefone</label>
+										<input class="au-input au-input--full" type="text" name="fone" />
+								    </div>
+									
+                                </div>
+								
+								<div class="form-group row">
+									<div class = "col-md-12">
+										<label>Email</label>
+										<input class="au-input au-input--full" type="text" name="email" placeholder="email"/>
 									</div>
+									<div class = "col-md-9">
+										<label>Endereço</label>
+										<input class="au-input au-input--full" type="text" name="endereco" onkeyup="maiuscula(this)"/>
+									</div>
+									<div class = "col-md-3">
+										<label>Nº</label>
+										<input class="au-input au-input--full" type="text" name="numero" required />
+									</div>
+                                </div>
+								
+								<div class="form-group row">
+									<div class = "col-md-12">
+										<label>Bairro</label>
+										<input class="au-input au-input--full" type="text" name="bairro" onkeyup="maiuscula(this)"/>
+									</div>
+									<div class = "col-md-8">
+										<label>Cidade</label>
+										<input class="au-input au-input--full" type="text" name="cidade" onkeyup="maiuscula(this)"/>
+									</div>
+									<div class = "col-md-4">
+										<label>UF</label>
+										<select name="uf" class = "form-control">
+											<option value="AC">Acre</option>
+											<option value="AL">Alagoas</option>
+											<option value="AP">Amapá</option>
+											<option value="AM">Amazonas</option>
+											<option value="BA">Bahia</option>
+											<option value="CE">Ceará</option>
+											<option value="DF">Distrito Federal</option>
+											<option value="ES">Espírito Santo</option>
+											<option value="GO">Goiás</option>
+											<option value="MA">Maranhão</option>
+											<option value="MT">Mato Grosso</option>
+											<option value="MS">Mato Grosso do Sul</option>
+											<option value="MG">Minas Gerais</option>
+											<option value="PA">Pará</option>
+											<option value="PB">Paraíba</option>
+											<option value="PR">Paraná</option>
+											<option value="PE">Pernambuco</option>
+											<option value="PI">Piauí</option>
+											<option value="RJ">Rio de Janeiro</option>
+											<option value="RN">Rio Grande do Norte</option>
+											<option value="RS">Rio Grande do Sul</option>
+											<option value="RO">Rondônia</option>
+											<option value="RR">Roraima</option>
+											<option value="SC">Santa Catarina</option>
+											<option value="SP">São Paulo</option>
+											<option value="SE">Sergipe</option>
+											<option value="TO">Tocantins</option>
+										</select>
+									</div>
+                                </div>
+								
+								<div class="form-group row">
+									<div class = "col-md-12">
+										<label>Como deseja chamar o(s) setor(es)?</label>
+										<input class="au-input au-input--full" type="text" name="lb_setor"/>
+									</div>
+									<div class = "col-md-12">
+										<label>Como deseja chamar o(s) departamento(s)?</label>
+										<input class="au-input au-input--full" type="text" name="lb_departamento"/>
+									</div>
+									<div class = "col-md-12">
+										<label>Logo</label>
+										<input class="au-input au-input--full" type="file" name="arquivo" />
+									</div>
+									
                                 </div>
                                 
                                 <button class="au-btn au-btn--block au-btn--green m-b-20" type="submit" name = "salvar">Salvar</button>
@@ -234,23 +309,68 @@ function maiuscula(z){
 
     </div>
 
-<?php
-	if(isset($_POST['salvar'])){
-		$nome = $_POST['nome'];
-		$cpf = $_POST['cpf'];
-		$senha = md5($_POST['senha']);
-		
-		$conexao->query("INSERT INTO tb_usuario(nome,cpf, senha, admin) VALUES ('$nome','$cpf','$senha', 1)");
-		
-		$SQLBusca = $conexao->query("SELECT * FROM tb_usuario WHERE cpf LIKE '$cpf' AND senha LIKE '$senha'");
-		if($SQLBusca->rowCount() > 0){
-			$RSBusca = $SQLBusca->fetch();
-			$_SESSION['login'] = $RSBusca['id'];
-		}
-		
-		echo "<meta http-equiv='refresh' content='0, url='>";
-	}
-?>
+								<?php
+									if(isset($_POST['salvar'])){
+										
+										if(isset($_FILES['arquivo']['name']) && $_FILES["arquivo"]["error"] == 0)
+										{
+
+											$arquivo_tmp = $_FILES['arquivo']['tmp_name'];
+											$nome = $_FILES['arquivo']['name'];
+											
+
+											// Pega a extensao
+											$extensao = strrchr($nome, '.');
+
+											// Converte a extensao para mimusculo
+											$extensao = strtolower($extensao);
+
+											// Somente imagens, .jpg;.jpeg;.gif;.png
+											// Aqui eu enfilero as extesões permitidas e separo por ';'
+											// Isso server apenas para eu poder pesquisar dentro desta String
+											if(strstr('.jpg;.jpeg;.gif;.png;.pdf;.doc;.docx', $extensao))
+											{
+												// Cria um nome único para esta imagem
+												// Evita que duplique as imagens no servidor.
+												$novoNome = md5(microtime()) . $extensao;
+												
+												// Concatena a pasta com o nome
+												$destino = '../uploads/'.$novoNome; 
+															
+												// tenta mover o arquivo para o destino
+												if( @move_uploaded_file( $arquivo_tmp, $destino  ))
+												{
+													$arquivo = "uploads/".$novoNome;
+													$razao_social = $_POST['razao_social'];
+													
+													$cnpj = $_POST['cnpj'];
+													$fone = $_POST['fone'];
+													$email = $_POST['email'];
+													$endereco = $_POST['endereco'];
+													$numero = $_POST['numero'];
+													$bairro = $_POST['bairro'];
+													$cidade = $_POST['cidade'];
+													$uf = $_POST['uf'];
+													$lb_setor = $_POST['lb_setor'];
+													$lb_departamento = $_POST['lb_departamento'];
+													
+													$conexao->query("INSERT INTO tb_instituicao(razao_social,cnpj,fone,email,endereco,numero,bairro,cidade,uf,logo,lb_setor,lb_departamento) VALUES('$razao_social','$cnpj','$fone','$email','$endereco','$numero','$bairro','$cidade','$uf','$arquivo','$lb_setor','$lb_departamento')");
+													
+													echo "<meta http-equiv='refresh' content='0, url='>";
+												}
+												else
+													echo "Erro ao salvar o arquivo. Aparentemente você não tem permissão de escrita.<br />";
+											}
+											else
+												echo "Você poderá enviar apenas arquivos \"*.jpg;*.jpeg;*.gif;*.png\"<br />";
+										}
+										else
+										{
+											echo "Você não enviou nenhum arquivo!";
+										}
+																			
+									}
+								?>
 
     <!-- Jquery JS-->
     <script src="vendor/jquery-3.2.1.min.js"></script>

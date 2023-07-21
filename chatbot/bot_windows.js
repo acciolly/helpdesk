@@ -1,9 +1,13 @@
-var msgInicial = "Este é um canal exclusivo para abertura de chamados da Prefeitura de Campo Novo do Parecis.";
+var msgInicial = "";
 
 var _host = "";
 var _bd = "";
 var _uid = "";
 var _pass = "";
+
+var _instituicao = "";
+var _lbSetor = "";
+var _lbDepartamento = "";
 
 const fs = require('fs')
 try {
@@ -48,6 +52,49 @@ connection.connect(function (err){
     }else{
         console.log('Erro ao conectar na base de dados: '+err.message);
         process.exit();
+    }
+});
+
+connection.query("SELECT * FROM tb_instituicao ORDER BY id DESC LIMIT 1", function(err,rows){
+    if(!err){
+        if(rows.length > 0){
+            _instituicao = rows[0].razao_social;
+            _lbSetor = rows[0].lb_setor;
+            _lbDepartamento = rows[0].lb_departamento;
+
+            msgInicial = "Olá! Este é um canal exclusivo para abertura de chamados da "+_instituicao;
+        }else{
+            console.log("SEM INSTITUIÇÃO CADASTRADA!");
+            process.exit();
+        }
+    }
+});
+
+//verifica se todos os cadastros necessários para realizar os chamdaos estão presentes no banco
+connection.query("SELECT * FROM tb_setor", function(err,rows){
+    if(!err){
+        if(rows.length > 0){
+            connection.query("SELECT * FROM tb_departamento",function(err,rowsDep){
+                if(!err){
+                    if(rowsDep.length > 0){
+                        connection.query("SELECT * FROM tb_categoria", function(err,rowsCat){
+                            if(!err){
+                                if(rowsCat.length === 0){
+                                    console.log("Não existe categoria cadastrada...");
+                                    process.exit();
+                                }
+                            }
+                        });
+                    }else{
+                        console.log("Não existe "+_lbDepartamento+" cadastrado(a)...");
+                        process.exit();
+                    }
+                }
+            });
+        }else{
+            console.log("Não existe "+_lbSetor+" cadastrado(a)...");
+            process.exit();
+        }
     }
 });
 
@@ -112,7 +159,7 @@ client.on('message', async(message) => {
                                             connection.query("SELECT * FROM tb_setor", function(err, rowsSetor){
                                                 if(!err){
                                                     if(rowsSetor.length > 1){
-                                                        client.sendMessage("Me fale de qual setor está falando...");
+                                                        client.sendMessage("Me fale de qual "+_lbSetor+" está falando...");
                                                         //ENVIA PARA O USUARIO OS SETORES RECUPERADOS DA TB_SETOR
                                                         for(var i = 0; i < rowsSetor.length; i++){
                                                             client.sendMessage(message.from, rowsSetor[i].id + " - "+rowsSetor[i].nome);
@@ -121,7 +168,7 @@ client.on('message', async(message) => {
                                                         
                                                     }else{
                                                         
-                                                        client.sendMessage(message.from, 'OK, me diz de qual departamento está falando:');
+                                                        client.sendMessage(message.from, 'OK, me diz de qual '+_lbDepartamento+' está falando:');
                                                         //BUSCA OS DEPARTAMENTOS CADASTRADOS NA TABELA TB_DEPARTAMENTO
                                                         connection.query("SELECT id, nome FROM tb_departamento", function(err,rowsDepartamento){
                                                         if(!err){
@@ -229,7 +276,7 @@ client.on('message', async(message) => {
                                                     if(rowsSet.length > 0){
                                                         connection.query("INSERT INTO tb_botchamado(pessoa,parametro,valor) VALUES('"+pessoa+"','SETOR','"+setor+"')", function(err,){
                                                             if(!err){
-                                                                client.sendMessage(message.from, 'OK, me diz de qual departamento está falando:');
+                                                                client.sendMessage(message.from, 'OK, me diz de qual '+_lbDepartamento+' está falando:');
                                                                 //BUSCA OS DEPARTAMENTOS CADASTRADOS NA TABELA TB_DEPARTAMENTO
                                                                 connection.query("SELECT id, nome FROM tb_departamento WHERE tb_setor_id = "+setor, function(err,rowsDepartamento){
                                                                     if(!err){
@@ -270,7 +317,7 @@ client.on('message', async(message) => {
                                                             }
                                                         });
                                                     }else{
-                                                        client.sendMessage(message.from, 'O departamento informado não existe, informe o departamento correto:');
+                                                        client.sendMessage(message.from, 'O(a) '+_lbDepartamento+' informado não existe, informe o departamento correto:');
                                                     }
                                                 }
                                             });
@@ -302,7 +349,7 @@ client.on('message', async(message) => {
                                                 }
                                             });
                                         }else{
-                                            client.sendMessage(message.from, 'O departamento informado não existe, informe o departamento correto:');
+                                            client.sendMessage(message.from, 'O(a) '+_lbDepartamento+' informado não existe, informe o departamento correto:');
                                         }
                                     }
                                 });
